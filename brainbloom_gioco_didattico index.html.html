@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BrainBloom — Impara giocando</title>
+<style>
+:root{--ink:#202044;--muted:#737391;--purple:#7057e8;--pink:#ff78a8;--mint:#72dfc0;--yellow:#ffd66e;--paper:#fbfaff}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,ui-rounded,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 10%,#f1eaff 0,transparent 30%),radial-gradient(circle at 90% 15%,#ffeaf2 0,transparent 25%),var(--paper);min-height:100vh}
+header{max-width:1100px;margin:auto;padding:24px 26px;display:flex;align-items:center;justify-content:space-between}.brand{font-size:1.35rem;font-weight:900;letter-spacing:-.7px}.brand span{color:var(--purple)}.pill{background:white;border:1px solid #eeeafa;padding:10px 15px;border-radius:30px;font-weight:700;color:var(--muted);font-size:.9rem}
+main{max-width:1050px;margin:25px auto 60px;padding:0 22px}.hero{text-align:center;margin:35px 0 30px}.eyebrow{display:inline-block;background:#eeeaff;color:var(--purple);padding:8px 14px;border-radius:30px;font-weight:800;font-size:.8rem;letter-spacing:.6px}.hero h1{font-size:clamp(2.4rem,6vw,4.5rem);line-height:1.02;letter-spacing:-2.5px;margin:18px 0 12px}.hero h1 span{color:var(--purple)}.hero p{color:var(--muted);font-size:1.08rem;margin:0}
+.layout{display:grid;grid-template-columns:1fr 310px;gap:22px;align-items:start}.game,.side{background:white;border:1px solid #efedf7;border-radius:26px;box-shadow:0 18px 55px #4230800c}.game{padding:30px}.topline{display:flex;justify-content:space-between;gap:12px;align-items:center;color:var(--muted);font-weight:800;font-size:.9rem}.progress{height:9px;background:#f0eef8;border-radius:20px;margin:16px 0 28px;overflow:hidden}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--purple),var(--pink));border-radius:20px;transition:width .3s}
+.category{font-size:.8rem;font-weight:900;color:#a09bb7;text-transform:uppercase;letter-spacing:1.2px}.question{font-size:clamp(1.45rem,3vw,2rem);line-height:1.25;margin:10px 0 24px;letter-spacing:-.6px}.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}.answer{border:2px solid #efedf7;background:#fff;border-radius:16px;padding:17px;text-align:left;font-size:1rem;font-weight:750;color:var(--ink);cursor:pointer;transition:.18s;min-height:66px}.answer:hover{border-color:#b8aafa;transform:translateY(-2px);background:#faf8ff}.answer.correct{background:#eafff7;border-color:#57d6ac;color:#147b5b}.answer.wrong{background:#fff0f4;border-color:#ff8cac;color:#b63760}.answer:disabled{cursor:default}
+.feedback{min-height:30px;margin:17px 0 4px;font-weight:800}.actions{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px}.btn{border:0;border-radius:14px;padding:13px 20px;background:var(--purple);color:white;font-size:.95rem;font-weight:850;cursor:pointer;box-shadow:0 8px 18px #7057e833}.btn:disabled{opacity:.35;cursor:not-allowed}.btn.secondary{background:#f1eff9;color:#625c7b;box-shadow:none}
+.side{padding:24px}.side h3{margin:0 0 15px;font-size:1.1rem}.scorebox{background:linear-gradient(135deg,#7057e8,#9a7df3);color:white;padding:20px;border-radius:20px;margin-bottom:20px}.scorebox small{opacity:.8;font-weight:700}.score{font-size:2.5rem;font-weight:950;margin-top:4px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#faf9fd;padding:14px;border-radius:15px}.stat b{display:block;font-size:1.25rem}.stat span{font-size:.78rem;color:var(--muted);font-weight:700}.tip{margin-top:18px;padding:15px;background:#fff8e7;border-radius:16px;color:#806324;font-size:.9rem;line-height:1.5}.tip strong{display:block;margin-bottom:3px}.result{text-align:center;padding:24px 5px}.result .emoji{font-size:4rem}.result h2{font-size:2rem;margin:10px 0}.result p{color:var(--muted);line-height:1.6}
+footer{text-align:center;color:#aaa5ba;font-size:.8rem;padding:0 20px 30px}
+@media(max-width:800px){.layout{grid-template-columns:1fr}.side{order:-1}.stats{grid-template-columns:repeat(2,1fr)}.game{padding:22px}.hero{margin-top:22px}}
+@media(max-width:520px){header{padding:18px}.answers{grid-template-columns:1fr}.answer{min-height:55px}.pill{font-size:.78rem}.actions{align-items:stretch}.btn{padding:12px 14px}}
+</style>
+</head>
+<body>
+<header><div class="brand">🌱 Brain<span>Bloom</span></div><div class="pill">✨ Impara · Gioca · Cresci</div></header>
+<main>
+<section class="hero"><div class="eyebrow">LA TUA PALESTRA PER LA MENTE</div><h1>Allena il cervello.<br><span>Divertiti imparando!</span></h1><p>Rispondi alle domande, conquista punti e diventa un campione della conoscenza.</p></section>
+<div class="layout">
+<section class="game" id="game">
+ <div class="topline"><span id="round">DOMANDA 1 DI 8</span><span id="progressText">0% completato</span></div>
+ <div class="progress"><div class="bar" id="bar"></div></div>
+ <div id="questionArea"><div class="category" id="category">🌍 GEOGRAFIA</div><h2 class="question" id="question">Qual è la capitale d'Italia?</h2><div class="answers" id="answers"></div><div class="feedback" id="feedback" aria-live="polite"></div><div class="actions"><button class="btn secondary" id="restart">↻ Ricomincia</button><button class="btn" id="next" disabled>Prossima domanda →</button></div></div>
+ <div class="result" id="result" hidden><div class="emoji" id="resultEmoji">🏆</div><h2>Fant शानदार! Hai finito!</h2><p id="resultText"></p><button class="btn" id="playAgain">Gioca ancora ↻</button></div>
+</section>
+<aside class="side">
+ <div class="scorebox"><small>IL TUO PUNTEGGIO</small><div class="score"><span id="score">0</span><span style="font-size:1rem"> / 80</span></div></div>
+ <h3>📊 La tua partita</h3><div class="stats"><div class="stat"><b id="correct">0</b><span>Risposte giuste</span></div><div class="stat"><b id="streak">0 🔥</b><span>Serie positiva</span></div><div class="stat"><b>8</b><span>Domande totali</span></div><div class="stat"><b>+10</b><span>Punti per risposta</span></div></div>
+ <div class="tip"><strong>💡 Lo sapevi?</strong><span id="tip">Ogni domanda è un'occasione per imparare qualcosa di nuovo. Buon divertimento!</span></div>
+</aside>
+</div>
+</main>
+<footer>Creato per imparare con il sorriso 💜 · BrainBloom</footer>
+<script>
+const questions=[
+{c:"🌍 Geografia",q:"Qual è la capitale d'Italia?",a:["Milano","Roma","Napoli","Firenze"],ok:1,tip:"Roma è la capitale d'Italia ed è conosciuta anche come la Città Eterna."},
+{c:"🔬 Scienze",q:"Quale pianeta è conosciuto come il Pianeta Rosso?",a:["Venere","Giove","Marte","Saturno"],ok:2,tip:"Marte appare rossastro per la presenza di ossidi di ferro nella sua superficie."},
+{c:"➗ Matematica",q:"Quanto fa 9 × 7?",a:["56","63","72","69"],ok:1,tip:"Le tabelline sono un superpotere: 9 × 7 = 63!"},
+{c:"📚 Italiano",q:"Qual è il contrario di «generoso»?",a:["Altruista","Gentile","Egoista","Leale"],ok:2,tip:"Un contrario di generoso è egoista: indica chi pensa soprattutto a sé."},
+{c:"🐾 Natura",q:"Qual è il mammifero più grande del mondo?",a:["Elefante africano","Balena azzurra","Giraffa","Orso polare"],ok:1,tip:"La balena azzurra può superare i 25 metri di lunghezza!"},
+{c:"🌌 Spazio",q:"Quanti pianeti ci sono nel Sistema Solare?",a:["7","8","9","10"],ok:1,tip:"I pianeti riconosciuti sono otto. Plutone è classificato come pianeta nano."},
+{c:"🎨 Arte",q:"Quali sono i tre colori primari della pittura tradizionale?",a:["Rosso, giallo e blu","Verde, viola e arancione","Nero, bianco e grigio","Rosa, azzurro e marrone"],ok:0,tip:"Nel modello tradizionale usato nella pittura, i primari sono rosso, giallo e blu."},
+{c:"🌱 Ambiente",q:"Quale di questi comportamenti aiuta a ridurre i rifiuti?",a:["Usare bottiglie usa e getta","Lasciare le luci accese","Riutilizzare una borraccia","Buttare tutto insieme"],ok:2,tip:"Una borraccia riutilizzabile riduce il consumo di bottiglie monouso."}
+];
+let index=0,score=0,correct=0,streak=0,answered=false;
+const $=id=>document.getElementById(id);
+function render(){
+ const q=questions[index];answered=false;
+ $("round").textContent=`DOMANDA ${index+1} DI ${questions.length}`;
+ $("progressText").textContent=`${Math.round(index/questions.length*100)}% completato`;
+ $("bar").style.width=`${index/questions.length*100}%`;
+ $("category").textContent=q.c;$("question").textContent=q.q;$("feedback").textContent="";
+ $("next").disabled=true;$("next").textContent=index===questions.length-1?"Vedi il risultato 🏆":"Prossima domanda →";
+ $("answers").innerHTML="";
+ q.a.forEach((answer,i)=>{const b=document.createElement("button");b.className="answer";b.textContent=String.fromCharCode(65+i)+".  "+answer;b.onclick=()=>choose(i);$("answers").appendChild(b)});
+}
+function choose(choice){
+ if(answered)return;answered=true;const q=questions[index];const buttons=[...$("answers").children];
+ buttons.forEach((b,i)=>{b.disabled=true;if(i===q.ok)b.classList.add("correct");else if(i===choice)b.classList.add("wrong")});
+ if(choice===q.ok){score+=10;correct++;streak++;$("feedback").textContent="🎉 Esatto! +10 punti";$("feedback").style.color="#15966d"}
+ else{streak=0;$("feedback").textContent="💡 Non proprio! La risposta giusta è: "+q.a[q.ok];$("feedback").style.color="#c15a78"}
+ $("score").textContent=score;$("correct").textContent=correct;$("streak").textContent=streak+" 🔥";$("tip").textContent=q.tip;$("next").disabled=false;
+}
+function next(){if(!answered)return;if(index<questions.length-1){index++;render()}else finish()}
+function finish(){
+ $("questionArea").hidden=true;$("result").hidden=false;$("bar").style.width="100%";$("progressText").textContent="100% completato";
+ const msg=score===80?"Sei un vero genio! Hai risposto correttamente a tutto.":score>=50?"Ottimo lavoro! La tua curiosità ti porterà lontano.":score>=30?"Bravo! Continua ad allenarti e migliorerai ancora.":"Ogni esperto è stato un principiante. Riprova e supera il tuo record!";
+ $("resultText").textContent=`Hai totalizzato ${score} punti su 80 e dato ${correct} risposte corrette su 8. ${msg}`;
+ $("resultEmoji").textContent=score===80?"🏆":score>=50?"🌟":score>=30?"👏":"🌱";
+}
+function restart(){index=0;score=0;correct=0;streak=0;$("score").textContent="0";$("correct").textContent="0";$("streak").textContent="0 🔥";$("questionArea").hidden=false;$("result").hidden=true;$("tip").textContent="Ogni domanda è un'occasione per imparare qualcosa di nuovo. Buon divertimento!";render()}
+$("next").onclick=next;$("restart").onclick=restart;$("playAgain").onclick=restart;render();
+</script>
+</body>
+</html>
